@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:stm32="https://developer.st.com/schemas/stm32cube/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="1.7.55" xsi:noNamespaceSchemaLocation="PACK.xsd" xsi:schemaLocation="https://developer.st.com/schemas/stm32cube/1.0.0 stm32cube.xsd">
+  <vendor>STMicroelectronics</vendor>
+  <name>led_part_drivers</name>
+  <description>LED Part Drivers SW Pack</description>
+  <url>https://developer.st.com/st-pack-server/api/v1/pack/</url>
+  <repository type="git">https://github.com/STMicroelectronics/stm32-led-part-drivers</repository>
+  <supportContact/>
+  <license>LICENSE.md</license>
+  <changelogs>
+    <changelog id="Release Notes" name="Release_Notes.html"/>
+  </changelogs>
+  <environments>
+    <environment name="STM32Cube">
+      <stm32:pack type="PARTDRV" friendlyName="led" shortDesc="led part driver">
+        <relocation-info parent="part_drivers" layer="" element=""/>
+        <compatibility>
+          <release version="2.0.0">
+            <applicable-schema schemaType="sw-configuration" schemaVersion="3.7.0"/>
+            <applicable-api-group apiType="codegen-getters">
+              <applicable-api apiType="pinoutAPI" apiVersion="1.0.0"/>
+              <applicable-api apiType="SWConfigurationAPI" apiVersion="1.0.0"/>
+            </applicable-api-group>
+          </release>
+        </compatibility>
+      </stm32:pack>
+    </environment>
+  </environments>
+  <ECCN>
+    <ECCN-EU>NEC</ECCN-EU>
+    <ECCN-US>EAR99</ECCN-US>
+  </ECCN>
+  <releases>
+    <release version="2.0.0" date="2026-02-17">
+      Refer to Release_Notes.md for release details.
+    </release>
+  </releases>
+  <keywords>
+    <keyword>STMicroelectronics</keyword>
+    <keyword>ST</keyword>
+    <keyword>STM32</keyword>
+    <keyword>Parts</keyword>
+    <keyword>Drivers</keyword>
+    <keyword>LED</keyword>
+    <keyword>HAL</keyword>
+    <keyword>TIM</keyword>
+    <keyword>PWM</keyword>
+  </keywords>
+  <conditions>
+    <condition id="HAL GPIO">
+      <description>STMicroelectronics LED GPIO HAL Driver</description>
+      <require Cclass="Device" Cgroup="STM32 HAL" Csub="GPIO"/>
+    </condition>
+    <condition id="HAL PWM">
+      <description>STMicroelectronics LED PWM HAL Driver</description>
+      <require Cclass="Device" Cgroup="STM32 HAL" Csub="TIM"/>
+    </condition>
+    <condition id="LED CFG Condition">
+      <description>STMicroelectronics configuration for LED part driver</description>
+    </condition>
+  </conditions>
+  <generators>
+    <generator id="led_mx2codegen">
+      <description>ST Microelectronics: STM32 Cube Code Generator for LED Drivers Pack</description>
+      <exe>
+        <command host="win">.config/gen_code.bat</command>
+        <command host="linux">.config/gen_code.sh</command>
+        <command host="mac">.config/gen_code.sh</command>
+        <argument>led_mx2codegen</argument>
+        <argument>$G</argument>
+        <argument>STMicroelectronics.led_part_drivers.gpdsc.hbs</argument>
+        <argument mode="dry-run">--dry-run</argument>
+      </exe>
+      <gpdsc name="$P/STMicroelectronics.led_part_drivers.gpdsc"/>
+    </generator>
+  </generators>
+  <components>
+    <component Cvendor="STMicroelectronics" Cclass="Board Part" Cgroup="LED" Csub="GPIO" Cversion="1.0.0" condition="HAL GPIO">
+      <description>Driver for LED driven by GPIO based on STM32 HAL</description>
+      <files>
+        <file category="doc" name="README.md"/>
+        <file category="doc" name="SW_Security_Level.md"/>
+        <file category="header" name="gpio/led.h"/>
+      </files>
+    </component>
+    <component Cvendor="STMicroelectronics" Cclass="Board Part" Cgroup="LED" Csub="PWM" Cversion="1.0.0" condition="HAL PWM">
+      <description>Driver for LED driven by PWM based on STM32 HAL</description>
+      <files>
+        <file category="doc" name="README.md"/>
+        <file category="doc" name="SW_Security_Level.md"/>
+        <file category="header" name="pwm/led_pwm.h"/>
+        <file category="source" name="pwm/led_pwm.c"/>
+      </files>
+    </component>
+    <component generator="led_mx2codegen" Cclass="Board Part" Cgroup="STM32CubeMX2 Config" Csub="LED" Cversion="1.0.0" condition="LED CFG Condition" maxInstances="10">
+      <description>LED STM32CubeMX2 Config</description>
+      <environments>
+        <environment name="STM32Cube">
+          <stm32:component>
+            <default-instance-name-prefix>LED</default-instance-name-prefix>
+            <supported-part-types>
+              <supported-part-type Hclass="Light" Hgroup="LED"/>
+            </supported-part-types>
+          </stm32:component>
+        </environment>
+      </environments>
+      <files>
+        <file category="genAsset" name=".config/gen_code.bat"/>
+        <file category="genAsset" name=".config/gen_code.sh"/>
+        <file category="genAsset" name=".config/STMicroelectronics.led_part_drivers.gpdsc.hbs"/>
+        <file category="genAsset" name=".config/mx_led_parameters.json"/>
+        <file category="genAsset" name=".config/template/hooks/mapping_hook.js"/>
+        <file category="genAsset" name=".config/template/gpio/mx_led_template.h.hbs"/>
+        <file category="genAsset" name=".config/template/pwm/mx_led_pwm_template.h.hbs"/>
+        <file category="genAsset" name=".config/template/pwm/mx_led_pwm_template.c.hbs"/>
+        <file category="genAsset" name=".config/template/license/mx_led_part_drivers_license_template.md.hbs"/>
+      </files>
+    </component>
+  </components>
+</package>

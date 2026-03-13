@@ -1,0 +1,95 @@
+{{!--
+  ******************************************************************************
+  * file           : mx_led_pwm_template.c.hbs
+  * brief          : Code generation for the LED PWM part driver.
+  ******************************************************************************
+  * attention
+  *
+  * Copyright (c) 2026 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+~--}}
+/**
+  ******************************************************************************
+  * file           : mx_led_pwm.c
+  * brief          : Code generation for the LED PWM part driver.
+  ******************************************************************************
+  * attention
+  *
+  * Copyright (c) {{#unless (eq 2026 (toInt (year)))}}2026-{{/unless}}{{year}} STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the mx_led_license.md file
+  * in the same directory as the generated code.
+  * If no mx_led_license.md file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+
+{{assign 'led_instances' (@root.SWConfigurationAPI.getInstances  "STMicroelectronics::Board Part:STM32CubeMX2 Config:LED")~}}
+
+/* Includes ---------------------------------------------------------------- */
+#include "mx_led_pwm.h"
+
+{{!---------------------- Part OBJs ----------------------------------------------------------}}
+{{#each @root.led_instances}}
+{{assign 'ctx' (@root.SWConfigurationAPI.getSwInstanceConfiguration this)~}}
+{{#if (eq @root.ctx.info.interface 'PWM')~}}
+static led_pwm_t  led_pwm_{{@index}}_obj;
+{{/if}}
+{{/each}}
+
+{{!---------------------- Part WEAK FUNC -----------------------------------------------------}}
+/**
+  * @brief initialize the IO layer.
+  * @param  pio      pointer to the part IO structure.
+  * @retval error status.
+  */
+int32_t led_pwm_io_init(led_pwm_t *pio)
+{
+  /* Part Status */
+  int32_t ret = 0;
+
+  switch (pio->id)
+  {
+{{#each @root.led_instances}}
+{{assign 'ctx' (@root.SWConfigurationAPI.getSwInstanceConfiguration this)~}}
+{{#with @root.ctx}}
+{{#if (eq info.interface 'PWM')~}}
+    case LED_PWM_{{@index}}:
+      pio->htim         = LED_PWM_{{@index}}_TIM_GETHANDLE();
+      pio->pwm_channel  = LED_PWM_{{@index}}_TIM_CHANNEL;
+      break;
+{{/if~}} {{!-- (eq info.interface 'PWM') --}}
+{{/with~}} {{!-- @root.ctx --}}
+{{/each~}} {{!-- @root.led_instances --}}
+    default:
+      /* Error -- Unknown ID */
+      ret = -1;
+      break;
+  }
+
+  return ret;
+}
+
+{{!---------------------- Part Getters FUNC --------------------------------------------------}}
+{{#each @root.led_instances}}
+{{assign 'ctx' (@root.SWConfigurationAPI.getSwInstanceConfiguration this)~}}
+{{#with @root.ctx}}
+{{#if (eq info.interface 'PWM')~}}
+/**
+  * @brief Function to retrieve the Part object LED_PWM_{{@index}}.
+  * @retval part object.
+  */
+led_pwm_t *mx_led_pwm_{{@index}}_getobject(void)
+{
+  return &led_pwm_{{@index}}_obj;
+}
+{{/if~}} {{!-- (eq info.interface 'PWM') --}}
+{{/with~}} {{!-- @root.ctx --}}
+{{/each~}} {{!-- @root.led_instances --}}

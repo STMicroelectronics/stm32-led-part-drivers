@@ -1,0 +1,202 @@
+{
+  "componentid": "::Board Part:STM32CubeMX2 Config:LED GPIO",
+  "type": "object",
+  "grammarVersion": "3.7.0",
+  "license": "Copyright (c) 2026 STMicroelectronics",
+  "properties": {
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "info": {
+          "title": "LED configuration",
+          "type": "object",
+          "properties": {
+            "labels": {
+              "type": "array",
+              "title": "SW Label for parts objects",
+              "description": "Labels allow to create aliases inside mx_led.h file for the object ID and object getter function. These aliases can be used on application side.",
+              "items": {
+                "type": "string",
+                "minLength": 0,
+                "maxLength": 32,
+                "unique": "project",
+                "default": "",
+                "actions": [
+                  {
+                    "type": "error",
+                    "condition": "!/^[A-Za-z_][A-Za-z0-9_]*$/.test($value)",
+                    "message": "Name must be a valid C identifier: start with a letter or underscore, and contain only letters, digits, or underscores."
+                  }
+                ]
+              }
+            },
+            "interface": {
+              "title": "Interface selection",
+              "description": "Select the Interface to be configured",
+              "type": "string",
+              "oneOf": [
+                {
+                  "const": "GPIO",
+                  "title": "GPIO"
+                },
+                {
+                  "const": "PWM",
+                  "title": "PWM"
+                }
+              ],
+              "default": "GPIO"
+            }
+          }
+        },
+        "resourcesAllocation": {
+          "type": "object",
+          "properties": {
+            "gpioCfg": {
+              "type": "object",
+              "title": "GPIO flavor Configuration",
+              "description": "GPIO flavor configuration",
+              "actions": [
+                {
+                  "type": "include",
+                  "condition": "$info.interface === 'GPIO'"
+                }
+              ],
+              "properties": {
+                "pinCfg": {
+                  "title": "Pin selection",
+                  "type": "object",
+                  "objectType": "bind.gpio.config",
+                  "description": "The GPIO pin must be configured as an output in push-pull mode in the HAL GPIO configuration panel",
+                  "pins": {
+                    "ledpin": {
+                      "title": "LED PIN",
+                      "constraints": {
+                        "mode": {
+                          "const": "OUTPUT"
+                        }
+                      }
+                    }
+                  },
+                  "actions": [
+                    {
+                      "type": "error",
+                      "condition": "!$resourcesAllocation.gpioCfg.pinCfg?.selection",
+                      "message": "Please select a GPIO pin configured as output in HAL GPIO configuration panel."
+                    }
+                  ]
+                }
+              }
+            },
+            "pwmCfg": {
+              "type": "object",
+              "title": "PWM flavor Configuration",
+              "description": "PWM flavor configuration",
+              "actions": [
+                {
+                  "type": "include",
+                  "condition": "$info.interface === 'PWM'"
+                }
+              ],
+              "properties": {
+                "timInstance": {
+                  "type": "object",
+                  "title": "TIM instance",
+                  "description": "the TIM instance should be set up with a single active channel with PWM mode in the HAL TIM configuration panel",
+                  "objectType": "bind.peripheral.config",
+                  "criteria": {
+                    "peripheralType": [
+                      "tim"
+                    ]
+                  },
+                  "actions": [
+                    {
+                      "type": "error",
+                      "condition": "!$resourcesAllocation.pwmCfg.timInstance?.selection",
+                      "message": "Please select a TIM instance configured with PWM mode in HAL TIM configuration panel."
+                    }
+                  ]
+                },
+                "timChannel": {
+                  "type": "string",
+                  "title": "TIM channel",
+                  "oneOf": [
+                    {
+                      "const": "HAL_TIM_CHANNEL_1",
+                      "actions": [
+                        {
+                          "type": "include",
+                          "condition": "$get('sw-config.peripheral-parameter-value', $resourcesAllocation.pwmCfg.timInstance.selection, 'channels')?.find(channel => channel._foreignKey === 'CC1')?.use_channel ?? false"
+                        }
+                      ]
+                    },
+                    {
+                      "const": "HAL_TIM_CHANNEL_2",
+                      "actions": [
+                        {
+                          "type": "include",
+                          "condition": "$get('sw-config.peripheral-parameter-value', $resourcesAllocation.pwmCfg.timInstance.selection, 'channels')?.find(channel => channel._foreignKey === 'CC2')?.use_channel ?? false"
+                        }
+                      ]
+                    },
+                    {
+                      "const": "HAL_TIM_CHANNEL_3",
+                      "actions": [
+                        {
+                          "type": "include",
+                          "condition": "$get('sw-config.peripheral-parameter-value', $resourcesAllocation.pwmCfg.timInstance.selection, 'channels')?.find(channel => channel._foreignKey === 'CC3')?.use_channel ?? false"
+                        }
+                      ]
+                    },
+                    {
+                      "const": "HAL_TIM_CHANNEL_4",
+                      "actions": [
+                        {
+                          "type": "include",
+                          "condition": "$get('sw-config.peripheral-parameter-value', $resourcesAllocation.pwmCfg.timInstance.selection, 'channels')?.find(channel => channel._foreignKey === 'CC4')?.use_channel ?? false"
+                        }
+                      ]
+                    },
+                    {
+                      "const": "HAL_TIM_CHANNEL_5",
+                      "actions": [
+                        {
+                          "type": "include",
+                          "condition": "$get('sw-config.peripheral-parameter-value', $resourcesAllocation.pwmCfg.timInstance.selection, 'channels')?.find(channel => channel._foreignKey === 'CC5')?.use_channel ?? false"
+                        }
+                      ]
+                    },
+                    {
+                      "const": "HAL_TIM_CHANNEL_6",
+                      "actions": [
+                        {
+                          "type": "include",
+                          "condition": "$get('sw-config.peripheral-parameter-value', $resourcesAllocation.pwmCfg.timInstance.selection, 'channels')?.find(channel => channel._foreignKey === 'CC6')?.use_channel ?? false"
+                        }
+                      ]
+                    },
+                    {
+                      "const": "HAL_TIM_CHANNEL_7",
+                      "actions": [
+                        {
+                          "type": "include",
+                          "condition": "$get('sw-config.peripheral-parameter-value', $resourcesAllocation.pwmCfg.timInstance.selection, 'channels')?.find(channel => channel._foreignKey === 'CC7')?.use_channel ?? false"
+                        }
+                      ]
+                    }
+                  ],
+                  "actions": [
+                    {
+                      "type": "error",
+                      "condition": "!$resourcesAllocation.pwmCfg.timChannel || $resourcesAllocation.pwmCfg.timChannel === ''",
+                      "message": "Please select a valid TIM channel."
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
