@@ -83,10 +83,11 @@ static led_pwm_status_t start_led_pwm_dma_pattern_alt(led_pwm_t *pled, uint32_t 
     return LED_PWM_ERROR;
   }
 
-  if (HAL_OK != HAL_TIM_OC_StartChannel_DMA(pled->htim,
-                                            pled->pwm_channel,
-                                            (const uint8_t *)pled->ppattern,
-                                            LED_PWM_PATTERN_SIZE * sizeof(pled->ppattern[0])))
+  if (HAL_OK != HAL_TIM_OC_StartChannel_DMA_Opt(pled->htim,
+                                                pled->pwm_channel,
+                                                (const uint8_t *)pled->ppattern,
+                                                LED_PWM_PATTERN_SIZE * sizeof(pled->ppattern[0]),
+                                                HAL_TIM_OPT_DMA_IT_SILENT))
   {
     return LED_PWM_ERROR;
   }
@@ -356,6 +357,11 @@ led_pwm_status_t led_pwm_blink_alt(led_pwm_t *pled, uint16_t period_ms)
 led_pwm_status_t led_pwm_play_pattern(led_pwm_t *pled, const uint16_t *pattern, uint16_t period_ms)
 {
   pled->ppattern = pattern;
+#if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
+  SCB_CleanDCache_by_Addr((uint32_t *)(uintptr_t)pled->ppattern,
+                          (int32_t)(LED_PWM_PATTERN_SIZE * sizeof(pled->ppattern[0])));
+#endif /* __DCACHE_PRESENT */
+
   return start_led_pwm_dma_pattern_alt(pled, period_ms);
 }
 

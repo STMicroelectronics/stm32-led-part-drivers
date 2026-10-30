@@ -1,7 +1,7 @@
 {
   "componentid": "::Board Part:STM32CubeMX2 Config:LED GPIO",
   "type": "object",
-  "grammarVersion": "3.7.0",
+  "grammarVersion": "3.8.0",
   "license": "Copyright (c) 2026 STMicroelectronics",
   "properties": {
     "parameters": {
@@ -130,11 +130,29 @@
                       ]
                     },
                     {
+                      "const": "HAL_TIM_CHANNEL_1N",
+                      "actions": [
+                        {
+                          "type": "include",
+                          "condition": "(($get('sw-config.peripheral-parameter-value', $resourcesAllocation.pwmCfg.timInstance.selection, 'channels')?.find(channel => channel._foreignKey === 'CC1')?.use_channel) ?? false) && !!$resourcesAllocation.pwmCfg.timInstance?.selection && $get('pinout.peripheralCanBeMapped', $resourcesAllocation.pwmCfg.timInstance.selection, 'CH1N')"
+                        }
+                      ]
+                    },
+                    {
                       "const": "HAL_TIM_CHANNEL_2",
                       "actions": [
                         {
                           "type": "include",
                           "condition": "$get('sw-config.peripheral-parameter-value', $resourcesAllocation.pwmCfg.timInstance.selection, 'channels')?.find(channel => channel._foreignKey === 'CC2')?.use_channel ?? false"
+                        }
+                      ]
+                    },
+                    {
+                      "const": "HAL_TIM_CHANNEL_2N",
+                      "actions": [
+                        {
+                          "type": "include",
+                          "condition": "(($get('sw-config.peripheral-parameter-value', $resourcesAllocation.pwmCfg.timInstance.selection, 'channels')?.find(channel => channel._foreignKey === 'CC2')?.use_channel) ?? false) && !!$resourcesAllocation.pwmCfg.timInstance?.selection && $get('pinout.peripheralCanBeMapped', $resourcesAllocation.pwmCfg.timInstance.selection, 'CH2N')"
                         }
                       ]
                     },
@@ -148,11 +166,29 @@
                       ]
                     },
                     {
+                      "const": "HAL_TIM_CHANNEL_3N",
+                      "actions": [
+                        {
+                          "type": "include",
+                          "condition": "(($get('sw-config.peripheral-parameter-value', $resourcesAllocation.pwmCfg.timInstance.selection, 'channels')?.find(channel => channel._foreignKey === 'CC3')?.use_channel) ?? false) && !!$resourcesAllocation.pwmCfg.timInstance?.selection && $get('pinout.peripheralCanBeMapped', $resourcesAllocation.pwmCfg.timInstance.selection, 'CH3N')"
+                        }
+                      ]
+                    },
+                    {
                       "const": "HAL_TIM_CHANNEL_4",
                       "actions": [
                         {
                           "type": "include",
                           "condition": "$get('sw-config.peripheral-parameter-value', $resourcesAllocation.pwmCfg.timInstance.selection, 'channels')?.find(channel => channel._foreignKey === 'CC4')?.use_channel ?? false"
+                        }
+                      ]
+                    },
+                    {
+                      "const": "HAL_TIM_CHANNEL_4N",
+                      "actions": [
+                        {
+                          "type": "include",
+                          "condition": "(($get('sw-config.peripheral-parameter-value', $resourcesAllocation.pwmCfg.timInstance.selection, 'channels')?.find(channel => channel._foreignKey === 'CC4')?.use_channel) ?? false) && !!$resourcesAllocation.pwmCfg.timInstance?.selection && $get('pinout.peripheralCanBeMapped', $resourcesAllocation.pwmCfg.timInstance.selection, 'CH4N')"
                         }
                       ]
                     },

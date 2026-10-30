@@ -15,6 +15,13 @@
       <stm32:pack type="PARTDRV" friendlyName="led" shortDesc="led part driver">
         <relocation-info parent="part_drivers" layer="" element=""/>
         <compatibility>
+          <release version="2.2.0">
+            <applicable-schema schemaType="sw-configuration" schemaVersion="3.8.0"/>
+            <applicable-api-group apiType="codegen-getters">
+              <applicable-api apiType="pinoutAPI" apiVersion="1.0.0"/>
+              <applicable-api apiType="SWConfigurationAPI" apiVersion="1.0.0"/>
+            </applicable-api-group>
+          </release>
           <release version="2.0.0">
             <applicable-schema schemaType="sw-configuration" schemaVersion="3.7.0"/>
             <applicable-api-group apiType="codegen-getters">
@@ -31,6 +38,9 @@
     <ECCN-US>EAR99</ECCN-US>
   </ECCN>
   <releases>
+    <release version="2.2.0" date="2026-08-25">
+      Refer to Release_Notes.md for release details.
+    </release>
     <release version="2.0.0" date="2026-02-17">
       Refer to Release_Notes.md for release details.
     </release>
@@ -83,7 +93,7 @@
         <file category="header" name="gpio/led.h"/>
       </files>
     </component>
-    <component Cvendor="STMicroelectronics" Cclass="Board Part" Cgroup="LED" Csub="PWM" Cversion="1.0.0" condition="HAL PWM">
+    <component Cvendor="STMicroelectronics" Cclass="Board Part" Cgroup="LED" Csub="PWM" Cversion="1.2.0" condition="HAL PWM">
       <description>Driver for LED driven by PWM based on STM32 HAL</description>
       <files>
         <file category="doc" name="README.md"/>
@@ -92,7 +102,7 @@
         <file category="source" name="pwm/led_pwm.c"/>
       </files>
     </component>
-    <component generator="led_mx2codegen" Cclass="Board Part" Cgroup="STM32CubeMX2 Config" Csub="LED" Cversion="1.0.0" condition="LED CFG Condition" maxInstances="10">
+    <component generator="led_mx2codegen" Cclass="Board Part" Cgroup="STM32CubeMX2 Config" Csub="LED" Cversion="1.1.0" condition="LED CFG Condition" maxInstances="10">
       <description>LED STM32CubeMX2 Config</description>
       <environments>
         <environment name="STM32Cube">
